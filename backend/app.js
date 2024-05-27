@@ -17,10 +17,12 @@ mongoose.connect('mongodb://mongodb:27017/EducaFinanciera')
 
 //import routes
 const authRoutes= require('./routes/auth');
+const validaToken=require('./routes/validate-token')
+const admin = require('./routes/admin')
 //route midlewares
 
 app.use('/api/user',authRoutes)
-
+app.use('/admin',validaToken, admin)
 
 app.get('/',(req,res)=>{
   res.send('Hola Alejandro')

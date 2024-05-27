@@ -6,6 +6,8 @@ const Joi = require('@hapi/joi')
 
 const bycript = require('bcrypt')
 
+const jwt = require('jsonwebtoken') 
+
 
 //Esto es para validar los valores 
 const schemaRegister= Joi.object({
@@ -18,6 +20,7 @@ const schemaLogin= Joi.object({
     email:Joi.string().min(6).max(255).required().email(),
     password:Joi.string().min(6).max(1024).required()
 })
+//Esto normalmente va en un controlador.
 
 router.post('/login', async (req, res)=>{
     //validar con  el joi el json que llega del front 
@@ -34,10 +37,15 @@ router.post('/login', async (req, res)=>{
     
     if(!validPassword) return res.status(400).json({error:true,mensaje:'Contraseña incorrecta' })
 
+    //MIDLEWARE
+    const token = jwt.sign({
+        name: user.name,
+        id:user._id
+    }, process.env.TOKEN_SECRET)
 
-    res.json({
+    res.header('auth-token',token).json({
         error:null,
-        mensaje:'Bienvenido '
+        data:{token}
     })
 })
 
