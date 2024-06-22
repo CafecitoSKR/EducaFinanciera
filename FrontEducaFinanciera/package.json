@@ -4,11 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "vite",
     "serve": "serve -s dist",
     "build": "vite build"
   },
   "dependencies": {
     "@primevue/themes": "^4.0.0-rc.2",
+    "axios": "^1.7.2",
     "primevue": "^4.0.0-rc.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.3",
