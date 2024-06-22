@@ -1,33 +1,28 @@
 <template>
- <pv-toolbar>
-  <template #start>
-  </template>
-  <template #end>
-    <pv-router-link to="/register">Register</pv-router-link>
-    <pv-router-link to="/login">Login</pv-router-link>
-    <pv-router-link to="/foro">Foro</pv-router-link>
-    </template> 
- </pv-toolbar>
- <main>
-  <router-view/>
- </main>
+  <div id="app">
+    <NavBar />
+    <router-view />
+  </div>
 </template>
 
-<script setup>
-import { useStore } from 'vuex';
+<script>
+import NavBar from './components/NavBar.vue';
 
-const store = useStore();
-
-const readToken = () => {
-  store.dispatch('readToken');
-};
-
-readToken();
+export default {
+  name: 'App',
+  components: {
+    NavBar
+  }
+}
 </script>
 
-<style scoped>
-img {
-  width: 100px;
-  height: auto;
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>

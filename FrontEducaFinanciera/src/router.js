@@ -1,28 +1,72 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
-import RegisterComponent from "@/components/register.component.vue";
-import LoginComponent from "@/components/login.component.vue";
-import store from './store';
-import ForoComponent from "@/components/foro.component.vue";
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeComponent from '@/components/Home.component.vue'; // Verifica la ruta y el nombre del archivo
+import RegisterComponent from '@/components/register.component.vue';
+import LoginComponent from '@/components/login.component.vue';
+import ProfileComponent from '@/components/profile.component.vue';
+import PostsComponent from '@/components/PostsComponent.vue';
+import { isAuthenticated } from '@/auth';
+
 
 const routes = [
-    { path: '/', redirect: '/home' },
-    { path: '/register', component: RegisterComponent},
-    { path: '/login', component: LoginComponent },
-    { path: '/foro', component: ForoComponent, meta: { requiresAuth: true }}
-]
+  {
+    path: '/',
+    name: 'Home',
+    component: HomeComponent
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: RegisterComponent,
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next('/profile');
+      } else {
+        next();
+      }
+    }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginComponent,
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next('/profile');
+      } else {
+        next();
+      }
+    }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfileComponent,
+    beforeEnter: (to, from, next) => {
+      if (!isAuthenticated()) {
+        next('/login');
+      } else {
+        next();
+      }
+    }
+  },
+    {
+        path: '/posts',
+        name: 'Posts',
+        component: PostsComponent,
+        beforeEnter: (to, from, next) => {
+            if (!isAuthenticated()) {
+                next('/login');
+            } else {
+                next();
+            }
+        }
+    }
+  // Otras rutas...
+];
 
 const router = createRouter({
-    history: createMemoryHistory(),
-    routes,
-})
+    history: createWebHistory(),
+    routes
+});
 
-router.beforeEach((to, from, next) => {
-    const rutaProtegida = to.matched.some(record => record.meta.requiresAuth);
-    if (rutaProtegida && store.state.token === null) {
-        next('/');
-    } else {
-        next();
-    }
-})
-
-export default router
+export default router;

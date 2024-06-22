@@ -17,6 +17,7 @@
 
 <script>
 import axios from 'axios';
+import { setToken } from '@/auth';
 
 export default {
   name: 'LoginComponent',
@@ -34,8 +35,8 @@ export default {
         const response = await axios.post('http://localhost:3000/api/user/login', this.user);
         console.log(response.data);
         alert('Login successful!');
-        localStorage.setItem('auth-token', response.data.data.token);
-        this.$router.push('/');
+        setToken(response.data.data.token);
+        this.$router.push('/profile');
       } catch (error) {
         console.error(error);
         if (error.response) {
