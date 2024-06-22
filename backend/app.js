@@ -1,33 +1,35 @@
-const express = require('express')
-const mongoose=require('mongoose')
-const bodyparser= require('body-parser')
-require('dotenv').config()
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+require('dotenv').config();
 
+const app = express();
+const port = 3000;
 
-const app = express()
-const port = 3000
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-app.use(bodyparser.urlencoded({extended:false}));
-app.use(bodyparser.json());
-
-//conexion con la base de datos
+// Conexión con la base de datos
 mongoose.connect('mongodb://mongodb:27017/EducaFinanciera')
-  .then(() => console.log('Base de datos conectada'))
-  .catch(e=>{console.log(e)});
+    .then(() => console.log('Base de datos conectada'))
+    .catch(e => console.log(e));
 
-//import routes
-const authRoutes= require('./routes/auth');
-const validaToken=require('./routes/validate-token')
-const admin = require('./routes/admin')
-//route midlewares
+// Importar rutas
+const authRoutes = require('./routes/auth');
+const validaToken = require('./routes/validate-token'); // Asegúrate de que este middleware esté exportado correctamente
+const admin = require('./routes/admin');
+const postRoutes = require('./routes/posts'); // Importar las rutas de posts
 
-app.use('/api/user',authRoutes)
-app.use('/admin',validaToken, admin)
+// Route middlewares
+app.use('/api/user', authRoutes);
+app.use('/admin', validaToken, admin);
+app.use('/posts', validaToken, postRoutes); // Asegúrate de que esta línea esté presente
 
-app.get('/',(req,res)=>{
-  res.send('Hola Alejandro')
-})
-//iniciar server
-app.listen(port,()=>{
-    console.log(`Example app listening on port ${port}`)
-})
+app.get('/', (req, res) => {
+    res.send('Hola Alejandro');
+});
+
+// Iniciar servidor
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
+});

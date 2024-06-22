@@ -9,8 +9,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-    - ./backend:/user/src/app  # Monta el código fuente del backend en el contenedor
-    - /user/src/app/node_modules  # Evita sobrescribir los módulos de node
+    - ./backend:/user/src/app  
+    - /user/src/app/node_modules  
     depends_on:
       - mongodb
     environment:
