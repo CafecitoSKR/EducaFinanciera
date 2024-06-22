@@ -17,7 +17,7 @@
 
 <script>
 import axios from 'axios';
-import { setToken } from '@/auth';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'LoginComponent',
@@ -30,12 +30,13 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['login']),
     async loginUser() {
       try {
         const response = await axios.post('http://localhost:3000/api/user/login', this.user);
         console.log(response.data);
         alert('Login successful!');
-        setToken(response.data.data.token);
+        this.login(response.data.data.token); // Usa la acción de Vuex
         this.$router.push('/profile');
       } catch (error) {
         console.error(error);

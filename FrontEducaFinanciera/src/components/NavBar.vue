@@ -10,17 +10,16 @@
 </template>
 
 <script>
-import { isAuthenticated, removeToken } from '@/auth';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
-    isAuthenticated() {
-      return isAuthenticated();
-    }
+    ...mapGetters(['isAuthenticated'])
   },
   methods: {
+    ...mapActions(['logout']),
     logoutUser() {
-      removeToken();
+      this.logout();
       this.$router.push('/login');
     }
   }
@@ -46,3 +45,4 @@ nav button {
   cursor: pointer;
 }
 </style>
+

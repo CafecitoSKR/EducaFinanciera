@@ -9,11 +9,18 @@ require('dotenv').config();
 const app = express();
 const port = 3000;
 
-// Configuración avanzada de CORS
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:8080']; // Añade más orígenes si es necesario
+
 const corsOptions = {
-  origin: 'http://localhost:8080',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization','auth-token'],
   credentials: true
 };
 
@@ -31,7 +38,6 @@ app.use(bodyParser.json());
 // Cabeceras de seguridad
 app.use(helmet());
 
-
 // Conexión con la base de datos
 mongoose.connect('mongodb://mongodb:27017/EducaFinanciera')
     .then(() => console.log('Base de datos conectada'))
@@ -39,14 +45,14 @@ mongoose.connect('mongodb://mongodb:27017/EducaFinanciera')
 
 // Importar rutas
 const authRoutes = require('./routes/auth');
-const validaToken = require('./routes/validate-token'); // Asegúrate de que este middleware esté exportado correctamente
+const validaToken = require('./routes/validate-token');
 const admin = require('./routes/admin');
-const postRoutes = require('./routes/posts'); // Importar las rutas de posts
+const postRoutes = require('./routes/posts');
 
 // Route middlewares
 app.use('/api/user', authRoutes);
 app.use('/admin', validaToken, admin);
-app.use('/posts', validaToken, postRoutes); // Asegúrate de que esta línea esté presente
+app.use('/posts', validaToken, postRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hola Alejandro');

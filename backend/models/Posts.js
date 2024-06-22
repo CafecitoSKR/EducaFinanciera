@@ -12,11 +12,6 @@ const postSchema = mongoose.Schema({
         required: true,
         min: 10
     },
-    author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
     images: [{
         data: Buffer,
         contentType: String
