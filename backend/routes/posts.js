@@ -11,16 +11,27 @@ const upload = multer({ storage: storage });
 const schemaPost = Joi.object({
     title: Joi.string().min(3).max(255).required(),
     content: Joi.string().min(10).required(),
-    author: Joi.string().required()
+    author: Joi.string().required(),  // Author es obligatorio
+    images: Joi.array().items(Joi.object({
+        data: Joi.binary().required(),
+        contentType: Joi.string().required()
+    })).optional(),
+    videos: Joi.array().items(Joi.object({
+        data: Joi.binary().required(),
+        contentType: Joi.string().required()
+    })).optional()
 });
 
 // Crear un nuevo post
 router.post('/', verify, upload.fields([{ name: 'images' }, { name: 'videos' }]), async (req, res) => {
     console.log('Request body:', req.body);
     console.log('Request files:', req.files);
+    console.log('Authenticated user ID:', req.user.id); // Verificar el ID del usuario autenticado
+    console.log('Authenticated user name:', req.user.name); // Verificar el nombre del usuario autenticado
 
-    const { title, content, author } = req.body;
-    
+    const { title, content } = req.body;
+    const author = req.user.name;  // Obtenemos el nombre del usuario autenticado
+
     // Validar los datos del post
     const { error } = schemaPost.validate({ title, content, author });
     if (error) {
@@ -55,7 +66,14 @@ router.post('/', verify, upload.fields([{ name: 'images' }, { name: 'videos' }])
     }
 });
 
-// Otras rutas permanecen igual...
+// Obtener todos los posts, solo para usuarios autenticados
+router.get('/', verify, async (req, res) => {
+    try {
+        const posts = await Post.find();
+        res.json(posts);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 module.exports = router;
-

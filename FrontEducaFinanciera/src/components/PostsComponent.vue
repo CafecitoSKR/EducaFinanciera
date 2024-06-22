@@ -34,15 +34,15 @@ export default {
       post: {
         title: '',
         content: '',
-        author: '', // Asegúrate de establecer esto al ID del usuario autenticado
+        author: '', // Este campo se llenará con el nombre del usuario autenticado
         images: [],
         videos: []
       }
     };
   },
   mounted() {
-    // Asume que tienes una función para obtener el ID del usuario
-    this.post.author = this.getAuthenticatedUserId();
+    // Asume que tienes una función para obtener el nombre del usuario
+    this.post.author = this.getAuthenticatedUserName();
   },
   methods: {
     handleImages(event) {
@@ -59,7 +59,7 @@ export default {
         const formData = new FormData();
         formData.append('title', this.post.title);
         formData.append('content', this.post.content);
-        formData.append('author', this.post.author); // Utiliza el ID del usuario autenticado
+        formData.append('author', this.post.author); // Utiliza el nombre del usuario autenticado
 
         for (let i = 0; i < this.post.images.length; i++) {
           formData.append('images', this.post.images[i]);
@@ -89,10 +89,9 @@ export default {
         alert('Failed to create post: ' + (error.response?.data?.message || error.message));
       }
     },
-    getAuthenticatedUserId() {
-      // Implementa esta función para obtener el ID del usuario autenticado
-      // Puede ser desde el almacenamiento local, Vuex, o cualquier otra fuente
-      return localStorage.getItem('userId') || 'USER_ID';
+    getAuthenticatedUserName() {
+      // Implementa esta función para obtener el nombre del usuario autenticado
+      return localStorage.getItem('userName') || 'Anonymous';
     }
   }
 }

@@ -1,11 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeComponent from '@/components/Home.component.vue'; // Verifica la ruta y el nombre del archivo
+import HomeComponent from '@/components/Home.component.vue';
 import RegisterComponent from '@/components/register.component.vue';
 import LoginComponent from '@/components/login.component.vue';
 import ProfileComponent from '@/components/profile.component.vue';
 import PostsComponent from '@/components/PostsComponent.vue';
 import { isAuthenticated } from '@/auth';
-
 
 const routes = [
   {
@@ -49,24 +48,24 @@ const routes = [
       }
     }
   },
-    {
-        path: '/posts',
-        name: 'Posts',
-        component: PostsComponent,
-        beforeEnter: (to, from, next) => {
-            if (!isAuthenticated()) {
-                next('/login');
-            } else {
-                next();
-            }
-        }
+  {
+    path: '/posts',
+    name: 'Posts',
+    component: PostsComponent,
+    beforeEnter: (to, from, next) => {
+      if (!isAuthenticated()) {
+        next('/login');
+      } else {
+        next();
+      }
     }
+  }
   // Otras rutas...
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
+  history: createWebHistory(),
+  routes
 });
 
 export default router;

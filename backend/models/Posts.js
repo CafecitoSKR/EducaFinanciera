@@ -12,6 +12,10 @@ const postSchema = mongoose.Schema({
         required: true,
         min: 10
     },
+    author: {
+        type: String,
+        required: true
+    },
     images: [{
         data: Buffer,
         contentType: String
