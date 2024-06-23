@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 // const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
+//const helmet = require('helmet');
 require('dotenv').config();
 
 const app = express();
@@ -31,7 +31,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Cabeceras de seguridad
-app.use(helmet());
+
+//app.use(helmet());
 
 // Conexión con la base de datos
 mongoose.connect('mongodb://mongodb:27017/EducaFinanciera')
