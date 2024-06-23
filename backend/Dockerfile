@@ -4,9 +4,9 @@ EXPOSE 3000
 
 WORKDIR /user/src/app
 
-COPY . .
-
 COPY package*.json ./
 RUN npm install
+
+COPY . .
 
 CMD ["node", "app.js"]

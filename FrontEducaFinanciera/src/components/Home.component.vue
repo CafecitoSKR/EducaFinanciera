@@ -62,19 +62,20 @@ export default {
     },
     getVideoSrc(video) {
       const binary = new Uint8Array(video.data.data);
-      const base64String = btoa(String.fromCharCode.apply(null, binary));
+      let binaryString = '';
+      for (let i = 0; i < binary.length; i++) {
+        binaryString += String.fromCharCode(binary[i]);
+      }
+      const base64String = btoa(binaryString);
       return `data:${video.contentType};base64,${base64String}`;
     },
     likePost(postId) {
-      // Acción de like (solo visual por ahora)
       alert(`Liked post ${postId}`);
     },
     commentPost(postId) {
-      // Acción de comentar (solo visual por ahora)
       alert(`Comment on post ${postId}`);
     },
     sharePost(postId) {
-      // Acción de compartir (solo visual por ahora)
       alert(`Share post ${postId}`);
     }
   }

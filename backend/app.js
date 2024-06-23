@@ -9,16 +9,10 @@ require('dotenv').config();
 const app = express();
 const port = 3000;
 
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:8080']; // Añade más orígenes si es necesario
+const allowedOrigins = ['http://localhost']; // Añade más orígenes si es necesario
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: 'http://localhost',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization','auth-token'],
   credentials: true

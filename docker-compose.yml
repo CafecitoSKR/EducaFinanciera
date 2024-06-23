@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  # Backend service
+  # Servicio de Backend
   backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-    - ./backend:/user/src/app  
-    - /user/src/app/node_modules  
+      - ./backend:/user/src/app
+      - /user/src/app/node_modules
     depends_on:
       - mongodb
     environment:
@@ -18,19 +18,15 @@ services:
     networks:
       - app-network
 
-  # Frontend service
+  # Servicio de Frontend
   frontend:
     build:
       context: ./FrontEducaFinanciera
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - backend
     networks:
       - app-network
 
-  # Primary MongoDB service
+  # Servicio Primario de MongoDB
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -41,7 +37,7 @@ services:
     networks:
       - app-network
 
-  # Backup MongoDB service
+  # Servicio de Respaldo de MongoDB
   mongodb-backup:
     image: mongo:latest
     container_name: mongodb-backup
@@ -49,6 +45,20 @@ services:
       - "27018:27017"
     volumes:
       - mongo-backup-data:/data/db
+    networks:
+      - app-network
+
+  # Servicio de Nginx
+  nginx:
+    build:
+      context: ./FrontEducaFinanciera
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"  # Para HTTPS
+    depends_on:
+      - frontend
+      - backend
     networks:
       - app-network
 
